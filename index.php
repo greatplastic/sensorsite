@@ -1,6 +1,7 @@
 <?php
 session_start();
 $_SESSION['page'] = "table";
+include("db.php");
 ?>
 
 <!DOCTYPE html>
@@ -21,5 +22,14 @@ $_SESSION['page'] = "table";
 	</head>
 	<body>
 	<?php include("nav.php"); ?>
+	
+	<div class="container">
+		<?php 
+		$cursor = $nodeinfo->find();
+		foreach($cursor as $doc) {
+			echo "<p>" . $doc['devid'] . "</p>";
+		}
+		?>
+	</div>
 	</body>
 </html>

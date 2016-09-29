@@ -13,10 +13,12 @@ body {
 .navbar-default .navbar-brand:hover, 
 .navbar-default .navbar-brand:focus {
     color: #F5F5F5;
+	font-size: 20px;
 }
 
 .navbar-default .navbar-nav > li > a {
     color: #F5F5F5;
+	font-size: 20px;
 }
 
 .navbar-default .navbar-nav > li > a:hover,

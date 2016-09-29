@@ -1,6 +1,7 @@
 <?php
 session_start();
 $_SESSION['page'] = "graph";
+include("db.php");
 ?>
 
 <!DOCTYPE html>
