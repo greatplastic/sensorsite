@@ -2,6 +2,15 @@
 session_start();
 $_SESSION['page'] = "table";
 include("db.php");
+
+function make_row($doc) {
+	$row = "<tr>\n";
+	$row .= "<td>" . $doc["devid"] . "</td>";
+	$row .= "<td>" . $doc["temp"] . "</td>";
+	$row .= "<td>" . $doc["time"] . "</td>\n";
+	$row .= "</tr>\n";
+	return $row;
+}
 ?>
 
 <!DOCTYPE html>
@@ -24,12 +33,33 @@ include("db.php");
 	<?php include("nav.php"); ?>
 	
 	<div class="container">
-		<?php 
-		$cursor = $nodeinfo->find();
-		foreach($cursor as $doc) {
-			echo "<p>" . $doc['devid'] . "</p>";
-		}
-		?>
+		<div class="panel panel-default">
+			<div class="panel-heading"><h2>Search Parameters</h2></div>
+			<div class="panel-body">Panel Content</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><h2>Results</h2></div>
+			<div class="panel-body">
+				<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Device ID</th>
+						<th>Temp</th>
+						<th>Time</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php 
+					$cursor = $nodeinfo->find();
+					foreach($cursor as $doc) {
+						echo make_row($doc);
+					}
+					?>
+				</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 	</body>
 </html>

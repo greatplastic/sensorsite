@@ -40,3 +40,16 @@ body {
     color: #555;
     background-color: #C7D0D5;
 }
+
+.panel-default {
+	border: 0px;
+}
+
+.panel-default > .panel-heading {
+	background-color: #FF7148;
+	color: #F5F5F5;
+}
+
+.panel-default > .panel-heading > h2 {
+	margin: 5px 0px 5px 0px;
+}
