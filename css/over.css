@@ -53,3 +53,16 @@ body {
 .panel-default > .panel-heading > h2 {
 	margin: 5px 0px 5px 0px;
 }
+
+.btn-default, .btn-default:hover, .btn-default:focus,  
+.btn-default:active {
+    color: #F5F5F5;
+    background-color: #FF7148;
+    border-color: #CCC;
+}
+
+.btn-default:active:focus {
+    color: #F5F5F5;
+    background-color: #E56540;
+    border-color: #CCC;
+}
