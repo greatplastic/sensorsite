@@ -49,12 +49,22 @@ function make_row($row) {
 		<div class="panel panel-default">
 			<div class="panel-heading"><h2>Search Parameters</h2></div>
 			<div class="panel-body">
-				<form>
-				<div class="row">
-				<div class="col-md-4">
-					<div class="radio">
-					  <label><input type="radio" name="search" id="time">Time Range</label>
+				<form action="index.php" method="post">
+					<div class="btn-group" data-toggle="buttons">
+					<label class="btn btn-default active">
+						<input type="checkbox" checked="checked" autocomplete="off" name="search[]" value="time"> Time Range
+					</label>
+					<label class="btn btn-default">
+						<input type="checkbox" autocomplete="off" name="search[]" value="dust"> Dust Level
+					</label>
+					<label class="btn btn-default">
+						<input type="checkbox" autocomplete="off" name="search[]" value="node"> Node ID
+					</label>
 					</div>
+					<br><br>
+					
+					<strong>Time Range</strong>
+					<br>
 					From:         
 					<div class='input-group date' id='from_date'>
 						<input type='text' class="form-control" />
@@ -62,7 +72,6 @@ function make_row($row) {
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
 					</div>
-
 					To: 
 					<div class='input-group date' id='to_date'>
 						<input type='text' class="form-control" id="to_date_input"/>
@@ -70,22 +79,17 @@ function make_row($row) {
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
 					</div>
-				</div>
-				
-				<div class="col-md-4">
-					<div class="radio">
-						<label><input type="radio" name="search" id="node">Node ID</label>
-					</div>
-				</div>
-				
-				<div class="col-md-4">
-					<div class="radio">
-						<label><input type="radio" name="search" id="dust">Dust Range</label>
-					</div>
-				</div>
-				</div>
-				<br>
-				<button type="submit" class="btn btn-default btn-lg">Submit</button>
+					<br>
+					
+					<strong>Dust Range</strong>
+					<input type='text' class="form-control" />
+					<br>
+					
+					<strong>Node ID</strong>
+					<input type='text' class="form-control" />
+					<br>
+					
+					<button type="submit" class="btn btn-default btn-lg">Submit</button>
 				</form>
 			</div>
 		</div>
@@ -105,12 +109,12 @@ function make_row($row) {
 				</thead>
 				<tbody>
 					<?php 
-					if ($result = $db_con->query("SELECT * FROM data LIMIT 20")) {
+/* 					if ($result = $db_con->query("SELECT * FROM data LIMIT 20")) {
 						while ($curr_row = $result->fetch_assoc()) {
 							echo make_row($curr_row);
 						}
 						$result->free();
-					}
+					} */
 					?>
 				</tbody>
 				</table>
