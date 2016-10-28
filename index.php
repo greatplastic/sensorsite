@@ -1,7 +1,33 @@
 <?php
 session_start();
-$_SESSION['page'] = "table";
 include("db.php");
+include("search_params.php");
+$_SESSION['page'] = "table";
+$db = new DBManager();
+
+// Update search parameters
+if (isset($_POST["search"])) {
+	$sp = new SearchParameters();
+	foreach($_POST["search"] as $parameter) {
+		switch($parameter) {
+			case "time":
+				$sp->set_time_params($_POST["from_time_input"], $_POST["to_time_input"]);
+				break;
+			case "dust":
+				$sp->set_dust_params($_POST["from_dust_input"], $_POST["to_dust_input"]);
+				break;
+			case "node":
+				$sp->set_node_params($_POST["node_input"]);
+				break;
+		}
+	}
+	
+	// Send search parameters to DBmanager
+}
+
+if (isset($_POST["from_time_input"])) {
+	echo($_POST["from_time_input"]);
+}
 
 function make_row($row) {
 	$output = "<tr>\n";
@@ -30,10 +56,10 @@ function make_row($row) {
 		<script src="js/bootstrap-datetimepicker.js"></script>
 		<script type="text/javascript">
 			$(function () {
-				$('#from_date').datetimepicker();
+				$('#from_time').datetimepicker();
 			});
 			$(function () {
-				$('#to_date').datetimepicker();
+				$('#to_time').datetimepicker();
 			});
 		</script>
 		<!--[if lt IE 9]>
@@ -66,15 +92,15 @@ function make_row($row) {
 					<strong>Time Range</strong>
 					<br>
 					From:         
-					<div class='input-group date' id='from_date'>
-						<input type='text' class="form-control" />
+					<div class='input-group date' id='from_time'>
+						<input type='text' name="from_time_input" class="form-control" />
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
 					</div>
 					To: 
-					<div class='input-group date' id='to_date'>
-						<input type='text' class="form-control" id="to_date_input"/>
+					<div class='input-group date' id='to_time'>
+						<input type='text' name="to_time_input" class="form-control"/>
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
@@ -82,11 +108,15 @@ function make_row($row) {
 					<br>
 					
 					<strong>Dust Range</strong>
-					<input type='text' class="form-control" />
+					<br>
+					From:
+					<input type='text' name="from_dust_input" class="form-control" />
+					To:
+					<input type='text' name="to_dust_input" class="form-control" />
 					<br>
 					
 					<strong>Node ID</strong>
-					<input type='text' class="form-control" />
+					<input type='text' name="node_input" class="form-control" />
 					<br>
 					
 					<button type="submit" class="btn btn-default btn-lg">Submit</button>

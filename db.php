@@ -13,16 +13,32 @@ data TABLE
 	node_id INT UNSIGNED
 */
 
-// Database parameters
-$db_user = "root";
-$db_pass = "mysql";
-$db_host = "localhost";
-$db_name = "sensors";
-$db_port = ini_get("mysqli.default_port");
+class DBManager {
+	// Database parameters
+	private $user;
+	private $pass;
+	private $host;
+	private $name;
+	private $port;
+	// Connection handler
+	private $con;
+	
+	function __construct() {
+		$this->user = "root";
+		$this->pass = "mysql";
+		$this->host = "localhost";
+		$this->name = "sensors";
+		$this->port = ini_get("mysqli.default_port");
+		$this->con = new mysqli($this->host, $this->user, 
+								$this->pass, $this->name, 
+								$this->port);
+		if ($this->con->connect_error) {
+			die("Unable to connect to DB: " . $mysqli->connect_errno . " " . $mysqli->connect_error);
+		}
+	}
+	
+	
 
-$db_con = new mysqli($db_host, $db_user, $db_pass, $db_name, $db_port);
-if ($db_con->connect_error) {
-    die("Unable to connect: " . $mysqli->connect_errno . " " . $mysqli->connect_error);
 }
 
 ?>
