@@ -4,7 +4,7 @@ include("db.php");
 include("search_params.php");
 $_SESSION['page'] = "table";
 $db = new DBManager();
-
+$result = NULL;
 // Update search parameters
 if (isset($_POST["search"])) {
 	$sp = new SearchParameters();
@@ -21,12 +21,7 @@ if (isset($_POST["search"])) {
 				break;
 		}
 	}
-	
-	// Send search parameters to DBmanager
-}
-
-if (isset($_POST["from_time_input"])) {
-	echo($_POST["from_time_input"]);
+	$result = $db->execute($sp);
 }
 
 function make_row($row) {
@@ -56,10 +51,14 @@ function make_row($row) {
 		<script src="js/bootstrap-datetimepicker.js"></script>
 		<script type="text/javascript">
 			$(function () {
-				$('#from_time').datetimepicker();
+				$('#from_time').datetimepicker({
+					format: 'YYYY-MM-DD HH:mm:ss'
+				});
 			});
 			$(function () {
-				$('#to_time').datetimepicker();
+				$('#to_time').datetimepicker({
+					format: 'YYYY-MM-DD HH:mm:ss'
+				});
 			});
 		</script>
 		<!--[if lt IE 9]>
@@ -139,12 +138,12 @@ function make_row($row) {
 				</thead>
 				<tbody>
 					<?php 
-/* 					if ($result = $db_con->query("SELECT * FROM data LIMIT 20")) {
+ 					if (!is_null($result)) {
 						while ($curr_row = $result->fetch_assoc()) {
 							echo make_row($curr_row);
 						}
 						$result->free();
-					} */
+					} 
 					?>
 				</tbody>
 				</table>

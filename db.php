@@ -37,6 +37,60 @@ class DBManager {
 		}
 	}
 	
+	function execute($search_params) {
+		/* Treat search parameters as a 3-bit number:
+		MSB <------> LSB
+		[time,dust,node]
+		 */
+		$choice = 0 + (((int)$search_params->search_time << 2) |
+				((int)$search_params->search_dust << 1) |
+				((int)$search_params->search_node));
+		$query = NULL;
+		$result = NULL;
+		switch ($choice) {
+			case 0:
+				break;
+			case 1: // Node
+				$query = $this->con->prepare("SELECT * FROM data WHERE node_id = ? LIMIT 1000");
+				$query->bind_param("i", $search_params->node_id);
+				break;
+			case 2: // Dust
+				$query = $this->con->prepare("SELECT * FROM data WHERE dust BETWEEN ? and ? LIMIT 1000");
+				$query->bind_param("ii", $search_params->from_dust, $search_params->to_dust);
+				break;
+			case 3: // Dust and Node
+				$query = $this->con->prepare("SELECT * FROM data WHERE dust BETWEEN ? and ? AND node_id = ? LIMIT 1000");
+				$query->bind_param("iii", $search_params->from_dust, 
+					$search_params->to_dust, $search_params->node_id);
+				break;
+			case 4: // Time
+				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ? LIMIT 1000");
+				$query->bind_param("ss", $search_params->from_time, $search_params->to_time);
+				break;
+			case 5: // Time and Node
+				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ? AND node_id = ? LIMIT 1000");
+				$query->bind_param("ssi", $search_params->from_time, $search_params->to_time, 
+					$search_params->node_id);
+				break;
+			case 6: // Time and Dust
+				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ? AND dust BETWEEN ? and ? LIMIT 1000");
+				$query->bind_param("ssii", $search_params->from_time, $search_params->to_time, 
+					$search_params->from_dust, $search_params->to_dust);
+				break;
+			case 7: // Time and Dust and Node
+				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ? AND dust BETWEEN ? and ? AND node_id = ? LIMIT 1000");
+				$query->bind_param("ssiii", $search_params->from_time, $search_params->to_time, 
+					$search_params->from_dust, $search_params->to_dust, $search_params->node_id);
+				break;
+			default:
+				break;
+		}
+		if (!is_null($query)) {
+			$query->execute();
+			$result = $query->get_result();
+		}
+		return $result;
+	}
 	
 
 }
