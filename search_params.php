@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/New_York'); // EST for date conversions
 
 class SearchParameters {
 	// Bools to determine which parameters are being searched
@@ -31,6 +32,12 @@ class SearchParameters {
 	}
 	
 	function set_time_params($from, $to) {
+		if (empty($from)) {
+			$from = date("Y-m-d H:i:s", strtotime('@0'));
+		}
+		if (empty($to)) {
+			$to = date("Y-m-d H:i:s", time());
+		}
 		$this->from_time = $from;
 		$this->to_time = $to;
 		$this->search_time = true;

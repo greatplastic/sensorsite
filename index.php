@@ -60,6 +60,19 @@ function make_row($row) {
 					format: 'YYYY-MM-DD HH:mm:ss'
 				});
 			});
+			$(document).ready(function () {
+				$('#dust_options').hide();
+				$('#node_options').hide();
+				$('#time_chk').change(function () {
+				  $('#time_options').fadeToggle(0);
+				});
+				$('#dust_chk').change(function () {
+				  $('#dust_options').fadeToggle(0);
+				});
+				$('#node_chk').change(function () {
+				  $('#node_options').fadeToggle(0);
+				});
+			});
 		</script>
 		<!--[if lt IE 9]>
 		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -77,35 +90,38 @@ function make_row($row) {
 				<form action="index.php" method="post">
 					<div class="btn-group" data-toggle="buttons">
 					<label class="btn btn-default active">
-						<input type="checkbox" checked="checked" autocomplete="off" name="search[]" value="time"> Time Range
+						<input type="checkbox" checked="checked" autocomplete="off" name="search[]" id="time_chk" value="time"> Time Range
 					</label>
 					<label class="btn btn-default">
-						<input type="checkbox" autocomplete="off" name="search[]" value="dust"> Dust Level
+						<input type="checkbox" autocomplete="off" name="search[]" id="dust_chk" value="dust"> Dust Level
 					</label>
 					<label class="btn btn-default">
-						<input type="checkbox" autocomplete="off" name="search[]" value="node"> Node ID
+						<input type="checkbox" autocomplete="off" name="search[]" id="node_chk" value="node"> Node ID
 					</label>
 					</div>
 					<br><br>
 					
+					<div id="time_options">
 					<strong>Time Range</strong>
 					<br>
 					From:         
 					<div class='input-group date' id='from_time'>
-						<input type='text' name="from_time_input" class="form-control" />
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
+						<input type='text' placeholder="YYYY-MM-DD HH:mm:ss or leave blank for earliest time" name="from_time_input" class="form-control" />
 					</div>
 					To: 
 					<div class='input-group date' id='to_time'>
-						<input type='text' name="to_time_input" class="form-control"/>
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
+						<input type='text' placeholder="YYYY-MM-DD HH:mm:ss or leave blank for current time" name="to_time_input" class="form-control"/>
 					</div>
 					<br>
+					</div>
 					
+					<div id="dust_options">
 					<strong>Dust Range</strong>
 					<br>
 					From:
@@ -113,10 +129,13 @@ function make_row($row) {
 					To:
 					<input type='text' name="to_dust_input" class="form-control" />
 					<br>
+					</div>
 					
+					<div id="node_options">
 					<strong>Node ID</strong>
 					<input type='text' name="node_input" class="form-control" />
 					<br>
+					</div>
 					
 					<button type="submit" class="btn btn-default btn-lg">Submit</button>
 				</form>
