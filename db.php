@@ -1,4 +1,5 @@
 <?php
+require_once("search_params.php");
 /*
 sensors DATABASE
 node TABLE
@@ -51,36 +52,36 @@ class DBManager {
 			case 0:
 				break;
 			case 1: // Node
-				$query = $this->con->prepare("SELECT * FROM data WHERE node_id = ? LIMIT 1000");
-				$query->bind_param("i", $search_params->node_id);
+				$query = $this->con->prepare("SELECT * FROM data WHERE node_id = ? LIMIT 30 OFFSET ?");
+				$query->bind_param("ii", $search_params->node_id, $search_params->offset);
 				break;
 			case 2: // Dust
-				$query = $this->con->prepare("SELECT * FROM data WHERE dust BETWEEN ? and ? LIMIT 1000");
-				$query->bind_param("ii", $search_params->from_dust, $search_params->to_dust);
+				$query = $this->con->prepare("SELECT * FROM data WHERE dust BETWEEN ? and ? LIMIT 30 OFFSET ?");
+				$query->bind_param("iii", $search_params->from_dust, $search_params->to_dust, $search_params->offset);
 				break;
 			case 3: // Dust and Node
-				$query = $this->con->prepare("SELECT * FROM data WHERE dust BETWEEN ? and ? AND node_id = ? LIMIT 1000");
-				$query->bind_param("iii", $search_params->from_dust, 
-					$search_params->to_dust, $search_params->node_id);
+				$query = $this->con->prepare("SELECT * FROM data WHERE dust BETWEEN ? and ? AND node_id = ? LIMIT 30 OFFSET ?");
+				$query->bind_param("iiii", $search_params->from_dust, 
+					$search_params->to_dust, $search_params->node_id, $search_params->offset);
 				break;
 			case 4: // Time
-				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ? LIMIT 1000");
-				$query->bind_param("ss", $search_params->from_time, $search_params->to_time);
+				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ? LIMIT 30 OFFSET ?");
+				$query->bind_param("ssi", $search_params->from_time, $search_params->to_time, $search_params->offset);
 				break;
 			case 5: // Time and Node
-				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ? AND node_id = ? LIMIT 1000");
-				$query->bind_param("ssi", $search_params->from_time, $search_params->to_time, 
-					$search_params->node_id);
+				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ? AND node_id = ? LIMIT 30 OFFSET ?");
+				$query->bind_param("ssii", $search_params->from_time, $search_params->to_time, 
+					$search_params->node_id, $search_params->offset);
 				break;
 			case 6: // Time and Dust
-				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ? AND dust BETWEEN ? and ? LIMIT 1000");
-				$query->bind_param("ssii", $search_params->from_time, $search_params->to_time, 
-					$search_params->from_dust, $search_params->to_dust);
+				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ? AND dust BETWEEN ? and ? LIMIT 30 OFFSET ?");
+				$query->bind_param("ssiii", $search_params->from_time, $search_params->to_time, 
+					$search_params->from_dust, $search_params->to_dust, $search_params->offset);
 				break;
 			case 7: // Time and Dust and Node
-				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ? AND dust BETWEEN ? and ? AND node_id = ? LIMIT 1000");
-				$query->bind_param("ssiii", $search_params->from_time, $search_params->to_time, 
-					$search_params->from_dust, $search_params->to_dust, $search_params->node_id);
+				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ? AND dust BETWEEN ? and ? AND node_id = ? LIMIT 30 OFFSET ?");
+				$query->bind_param("ssiiii", $search_params->from_time, $search_params->to_time, 
+					$search_params->from_dust, $search_params->to_dust, $search_params->node_id, $search_params->offset);
 				break;
 			default:
 				break;
@@ -92,7 +93,6 @@ class DBManager {
 		return $result;
 	}
 	
-
 }
 
 ?>
