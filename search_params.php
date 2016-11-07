@@ -14,10 +14,6 @@ class SearchParameters {
 	private $to_dust;
 	private $node_id;
 	
-	// Offset value for limiting results
-	private $offset;
-	const OFFSET_STEP = 30;
-	
 	function __construct() {
 		$this->search_time = false;
 		$this->search_dust = false;
@@ -27,7 +23,6 @@ class SearchParameters {
 		$this->from_dust = NULL;
 		$this->to_dust = NULL;
 		$this->node_id = NULL;
-		$this->offset = 0;
 	}
 	
 	function __get($property) {
@@ -59,16 +54,6 @@ class SearchParameters {
 		$this->search_node = true;
 	}
 	
-	function increase_offset() {
-		$this->offset += self::OFFSET_STEP;
-	}
-	
-	function decrease_offset() {
-		$this->offset -= self::OFFSET_STEP;
-		if ($this->offset < 0) {
-			$this->offset = 0;
-		}
-	}
 }
 
 ?>

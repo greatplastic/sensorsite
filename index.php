@@ -1,28 +1,12 @@
 <?php
-require_once("db.php");
-require_once("search_params.php");
 session_start();
+include("db.php");
+include("search_params.php");
 $_SESSION['page'] = "table";
-if (!isset($_SESSION['saved_search_params'])) {
-	$_SESSION['saved_search_params'] = new SearchParameters();
-}
 $db = new DBManager();
 $result = NULL;
-
-if (isset($_GET["action"])) {
-	switch($_GET["action"]) {
-		case "prev":
-			$_SESSION['saved_search_params']->decrease_offset();
-			$result = $db->execute($_SESSION['saved_search_params']);
-			break;
-		case "next":
-			$_SESSION['saved_search_params']->increase_offset();
-			$result = $db->execute($_SESSION['saved_search_params']);
-			break;
-		default:
-			break;
-	}
-} elseif (isset($_POST["search"])) {
+// Update search parameters
+if (isset($_POST["search"])) {
 	$sp = new SearchParameters();
 	foreach($_POST["search"] as $parameter) {
 		switch($parameter) {
@@ -37,7 +21,6 @@ if (isset($_GET["action"])) {
 				break;
 		}
 	}
-	$_SESSION['saved_search_params'] = $sp;
 	$result = $db->execute($sp);
 }
 
@@ -160,11 +143,7 @@ function make_row($row) {
 		</div>
 
 		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h2>Results</h2>
-				<a href="index.php?action=prev">Prev</a>
-				<a href="index.php?action=next">Next</a>
-			</div>
+			<div class="panel-heading"><h2>Results</h2></div>
 			<div class="panel-body">
 				<table class="table table-striped">
 				<thead>
