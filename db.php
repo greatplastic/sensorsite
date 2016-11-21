@@ -51,34 +51,34 @@ class DBManager {
 			case 0:
 				break;
 			case 1: // Node
-				$query = $this->con->prepare("SELECT * FROM data WHERE node_id = ?");
+				$query = $this->con->prepare("SELECT dust, humidity, temperature, timestamp, node_id FROM data WHERE node_id = ?");
 				$query->bind_param("i", $search_params->node_id);
 				break;
 			case 2: // Dust
-				$query = $this->con->prepare("SELECT * FROM data WHERE dust BETWEEN ? and ?");
+				$query = $this->con->prepare("SELECT dust, humidity, temperature, timestamp, node_id FROM data WHERE dust BETWEEN ? and ?");
 				$query->bind_param("ii", $search_params->from_dust, $search_params->to_dust);
 				break;
 			case 3: // Dust and Node
-				$query = $this->con->prepare("SELECT * FROM data WHERE dust BETWEEN ? and ? AND node_id = ?");
+				$query = $this->con->prepare("SELECT dust, humidity, temperature, timestamp, node_id FROM data WHERE dust BETWEEN ? and ? AND node_id = ?");
 				$query->bind_param("iii", $search_params->from_dust, 
 					$search_params->to_dust, $search_params->node_id);
 				break;
 			case 4: // Time
-				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ?");
+				$query = $this->con->prepare("SELECT dust, humidity, temperature, timestamp, node_id FROM data WHERE timestamp BETWEEN ? AND ?");
 				$query->bind_param("ss", $search_params->from_time, $search_params->to_time);
 				break;
 			case 5: // Time and Node
-				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ? AND node_id = ?");
+				$query = $this->con->prepare("SELECT dust, humidity, temperature, timestamp, node_id FROM data WHERE timestamp BETWEEN ? AND ? AND node_id = ?");
 				$query->bind_param("ssi", $search_params->from_time, $search_params->to_time, 
 					$search_params->node_id);
 				break;
 			case 6: // Time and Dust
-				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ? AND dust BETWEEN ? and ?");
+				$query = $this->con->prepare("SELECT dust, humidity, temperature, timestamp, node_id FROM data WHERE timestamp BETWEEN ? AND ? AND dust BETWEEN ? and ?");
 				$query->bind_param("ssii", $search_params->from_time, $search_params->to_time, 
 					$search_params->from_dust, $search_params->to_dust);
 				break;
 			case 7: // Time and Dust and Node
-				$query = $this->con->prepare("SELECT * FROM data WHERE timestamp BETWEEN ? AND ? AND dust BETWEEN ? and ? AND node_id = ?");
+				$query = $this->con->prepare("SELECT dust, humidity, temperature, timestamp, node_id FROM data WHERE timestamp BETWEEN ? AND ? AND dust BETWEEN ? and ? AND node_id = ?");
 				$query->bind_param("ssiii", $search_params->from_time, $search_params->to_time, 
 					$search_params->from_dust, $search_params->to_dust, $search_params->node_id);
 				break;
