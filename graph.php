@@ -8,7 +8,6 @@ require_once ('jpgraph/jpgraph.php');
 require_once ('jpgraph/jpgraph_line.php');
 require_once ('jpgraph/jpgraph_date.php');
 require_once ('jpgraph/jpgraph_error.php');
-require_once ('jpgraph/jpgraph_utils.inc.php');
 $db = new DBManager();
 $result = NULL;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

@@ -17,12 +17,13 @@ function is_active_page($page_name) {
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-	  <a class="navbar-brand" href="#">CDC SensorView</a>
+	  <a class="navbar-brand" href="index.php">CDC SensorView</a>
 	</div>
 	<div id="navbar" class="navbar-collapse collapse">
 		<ul class="nav navbar-nav navbar-right">
 			<li <?php is_active_page("table"); ?>><a href="index.php">Table View</a></li>
 			<li <?php is_active_page("graph"); ?>><a href="graph.php">Graph View</a></li>
+			<li <?php is_active_page("nodemap"); ?>><a href="nodemap.php">Node Map</a></li>
 		</ul>
 	</div>
   </div>
