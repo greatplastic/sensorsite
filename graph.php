@@ -8,6 +8,7 @@ require_once ('jpgraph/jpgraph.php');
 require_once ('jpgraph/jpgraph_line.php');
 require_once ('jpgraph/jpgraph_date.php');
 require_once ('jpgraph/jpgraph_error.php');
+require_once ('jpgraph/jpgraph_utils.inc.php');
 $db = new DBManager();
 $result = NULL;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -17,9 +18,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$result = $db->execute($sp);
 }
 
-function make_base_graph($title, $x_data) {
+/* Time intervals used for graphing 
+ with a sampling rate of 12 seconds */
+$sec_interval = 5; // 5 samples in 1 minute
+$min_interval = 300; // 300 samples in 1 hour
+$hour_interval = 7200; // 7200 samples in 1 day
+$day_interval = 50400; // 50400 samples in 1 week
+$week_interval = 201600; // 201600 samples in 28 days
+$month_interval = 2419200; // 2419200 samples in 12*28 days
+
+function make_base_graph($title, $time) {
 	$graph = new Graph(800,600);
-	$graph->SetScale("datlin");
+	$graph->SetScale("datint");
 	$theme_class = new UniversalTheme;
 	$graph->SetTheme($theme_class);
 	$graph->img->SetAntiAliasing(false);
@@ -30,11 +40,33 @@ function make_base_graph($title, $x_data) {
 	$graph->yaxis->HideZeroLabel();
 	$graph->yaxis->HideLine(false);
 	$graph->yaxis->HideTicks(false,false);
-	
+		
 	$graph->xgrid->Show();
 	$graph->xgrid->SetLineStyle("solid");
-	$graph->xaxis->SetTickLabels($x_data);
+	$graph->xaxis->SetLabelAngle(80);
 	$graph->xgrid->SetColor('#E3E3E3');
+	
+	$samples = count($time);
+	if ($samples <= $sec_interval) {
+		$graph ->xaxis->scale->SetDateFormat('i:s');
+		//$graph->xaxis->SetTextLabelInterval(2);
+	} elseif ($samples <= $min_interval) {
+		$graph ->xaxis->scale->SetDateFormat('H:i');
+		//$graph->xaxis->SetTextLabelInterval(2);
+	} elseif ($samples <= $hour_interval) {
+		$graph ->xaxis->scale->SetDateFormat('d H:i');
+		//$graph->xaxis->SetTextLabelInterval(2);
+	} elseif ($samples <= $day_interval) {
+		$graph ->xaxis->scale->SetDateFormat('d H:i');
+		//$graph->xaxis->SetTextLabelInterval(2);
+	} elseif ($samples <= $week_interval) {
+		$graph ->xaxis->scale->SetDateFormat('m-d H:i:s');
+		//$graph->xaxis->SetTextLabelInterval(2);
+	} else {
+		$graph ->xaxis->scale->SetDateFormat('Y-m-d H:i:s');
+		//$graph->xaxis->SetTextLabelInterval(2);
+	}
+	$graph->xaxis->SetTickLabels($time);
 	return $graph;
 }
 ?>
@@ -46,6 +78,7 @@ function make_base_graph($title, $x_data) {
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/bootstrap-datetimepicker.css" rel="stylesheet">
 		<link href="css/over.css" rel="stylesheet">
 		<script src="js/jquery.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
@@ -107,23 +140,23 @@ function make_base_graph($title, $x_data) {
 			</div>
 		</div>
 		<?php
+		$node_id = 0;
 		$time_data = array();
 		$temp_data = array();
 		$hum_data = array();
 		$dust_data = array();
 		if (!is_null($result)) {
-			$i = 0;
-			while (($curr_row = $result->fetch_assoc()) && $i < 7) {
+			while ($curr_row = $result->fetch_assoc()) {
 				$time_data[] = date("Y-m-d H:i:s", strtotime($curr_row["timestamp"]));
 				$temp_data[] = $curr_row["temperature"];
 				$hum_data[] = $curr_row["humidity"];
 				$dust_data[] = $curr_row["dust"];
-				$i++;
+				$node_id = $curr_row["node_id"];
 			}
 			$result->free();
-			$temp_graph = make_base_graph("Temperature", $time_data);
-			$hum_graph = make_base_graph("Humidity", $time_data);
-			$dust_graph = make_base_graph("Dust", $time_data);
+			$temp_graph = make_base_graph("Node $node_id Temperature", $time_data);
+			$hum_graph = make_base_graph("Node $node_id Humidity", $time_data);
+			$dust_graph = make_base_graph("Node $node_id Dust", $time_data);
 			
 			// Filter data length here
 			
@@ -161,9 +194,11 @@ function make_base_graph($title, $x_data) {
 			<div class="panel-body">
 			<?php
 			if (!is_null($result)) {
+				echo '<center>';
 				echo '<img src="temp_graph.jpg"></img><br>';
 				echo '<img src="hum_graph.jpg"></img><br>';
 				echo '<img src="dust_graph.jpg"></img><br>';
+				echo '</center>';
 			}
 			?>
 			</div>
