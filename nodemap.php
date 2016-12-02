@@ -3,15 +3,12 @@ session_start();
 include("db.php");
 $_SESSION['page'] = "nodemap";
 $db = new DBManager();
-$result = NULL;
-
+$result = $db->get_node_locs();
 function make_row($row) {
 	$output = "<tr>\n";
-	$output .= sprintf("<td>%s</td>", $row["dust"]);
-	$output .= sprintf("<td>%s</td>", $row["humidity"]);
-	$output .= sprintf("<td>%s</td>", $row["temperature"]);
-	$output .= sprintf("<td>%s</td>", $row["timestamp"]);
 	$output .= sprintf("<td>%s</td>", $row["node_id"]);
+	$output .= sprintf("<td>%s</td>", $row["lat"]);
+	$output .= sprintf("<td>%s</td>", $row["long"]);
 	$output .= "</tr>\n";
 	return $output;
 }
@@ -42,11 +39,30 @@ function make_row($row) {
 		<div class="panel panel-default">
 			<div class="panel-heading"><h2>Node Map</h2></div>
 			<div class="panel-body">
+				<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Node ID</th>
+						<th>Latitude</th>
+						<th>Longitude</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php 
+ 					if (!is_null($result)) {
+						while ($curr_row = $result->fetch_assoc()) {
+							echo make_row($curr_row);
+						}
+						$result->free();
+					} 
+					?>
+				</tbody>
+				</table>			
 				<div id="map" style="height: 400px;">
 				<script type="text/javascript">
 				var map = L.map('map',{
-				center: [43.64701, -79.39425],
-				zoom: 15
+				center: [33.7983632, -84.3272197],
+				zoom: 10
 				});
 				L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 				attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

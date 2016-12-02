@@ -92,6 +92,12 @@ class DBManager {
 		return $result;
 	}
 	
+	function get_node_locs() {
+		$result = $this->con->query("SELECT node_id, lat, `long` FROM node");
+		echo $this->con->error;
+		return $result;
+		
+	}
 
 }
 
