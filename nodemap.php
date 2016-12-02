@@ -4,14 +4,23 @@ include("db.php");
 $_SESSION['page'] = "nodemap";
 $db = new DBManager();
 $result = $db->get_node_locs();
+
 function make_row($row) {
+	$script = "map.panTo(new L.LatLng($row[lat], $row[long]));";
 	$output = "<tr>\n";
-	$output .= sprintf("<td>%s</td>", $row["node_id"]);
+	$output .= sprintf("<td style='cursor: pointer' onclick='$script'>%s (click to view on map)</td>", $row["node_id"]);
 	$output .= sprintf("<td>%s</td>", $row["lat"]);
 	$output .= sprintf("<td>%s</td>", $row["long"]);
 	$output .= "</tr>\n";
 	return $output;
 }
+
+function add_markers($lats, $longs) {
+	for ($i=0; $i<count($lats); $i++) {
+		echo "L.marker([$lats[$i], $longs[$i]]).addTo(map);";
+	}
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -49,8 +58,12 @@ function make_row($row) {
 				</thead>
 				<tbody>
 					<?php 
- 					if (!is_null($result)) {
+					$lats = array();
+					$longs = array();
+ 					if (!is_null($result) && $result != false) {
 						while ($curr_row = $result->fetch_assoc()) {
+							$lats[] = $curr_row["lat"];
+							$longs[] = $curr_row["long"];
 							echo make_row($curr_row);
 						}
 						$result->free();
@@ -67,7 +80,7 @@ function make_row($row) {
 				L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 				attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 				}).addTo(map);
-				L.marker([43.64701, -79.39425]).addTo(map);
+				<?php add_markers($lats, $longs); ?>
 				</script>
 				</div>
 			</div>
