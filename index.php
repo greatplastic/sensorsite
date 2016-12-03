@@ -29,7 +29,7 @@ function make_row($row) {
 	$output .= sprintf("<td>%s</td>", $row["dust"]);
 	$output .= sprintf("<td>%s</td>", $row["humidity"]);
 	$output .= sprintf("<td>%s</td>", $row["temperature"]);
-	$output .= sprintf("<td>%s</td>", $row["timestamp"]);
+	$output .= sprintf("<td>%s</td>", $row["t_collected"]);
 	$output .= sprintf("<td>%s</td>", $row["node_id"]);
 	$output .= "</tr>\n";
 	return $output;
@@ -151,7 +151,7 @@ function make_row($row) {
 						<th>Dust</th>
 						<th>Humidity</th>
 						<th>Temperature</th>
-						<th>Timestamp</th>
+						<th>Time Collected</th>
 						<th>Node ID</th>
 					</tr>
 				</thead>

@@ -31,11 +31,9 @@ function make_base_graph($title, $time) {
 	$graph->SetScale("datint");
 	$theme_class = new UniversalTheme;
 	$graph->SetTheme($theme_class);
-	$graph->img->SetAntiAliasing(false);
 	$graph->title->Set($title);
 	$graph->SetBox(false);
-	$graph->img->SetAntiAliasing();
-	
+	//$graph->img->SetAntiAliasing();	
 	$graph->yaxis->HideZeroLabel();
 	$graph->yaxis->HideLine(false);
 	$graph->yaxis->HideTicks(false,false);

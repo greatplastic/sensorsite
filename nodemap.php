@@ -6,11 +6,11 @@ $db = new DBManager();
 $result = $db->get_node_locs();
 
 function make_row($row) {
-	$script = "map.panTo(new L.LatLng($row[lat], $row[long]));";
+	$script = "map.panTo(new L.LatLng($row[latitude], $row[longitude]));";
 	$output = "<tr>\n";
 	$output .= sprintf("<td style='cursor: pointer' onclick='$script'>%s (click to view on map)</td>", $row["node_id"]);
-	$output .= sprintf("<td>%s</td>", $row["lat"]);
-	$output .= sprintf("<td>%s</td>", $row["long"]);
+	$output .= sprintf("<td>%s</td>", $row["latitude"]);
+	$output .= sprintf("<td>%s</td>", $row["longitude"]);
 	$output .= "</tr>\n";
 	return $output;
 }
@@ -62,8 +62,8 @@ function add_markers($lats, $longs) {
 					$longs = array();
  					if (!is_null($result) && $result != false) {
 						while ($curr_row = $result->fetch_assoc()) {
-							$lats[] = $curr_row["lat"];
-							$longs[] = $curr_row["long"];
+							$lats[] = $curr_row["latitude"];
+							$longs[] = $curr_row["longitude"];
 							echo make_row($curr_row);
 						}
 						$result->free();
