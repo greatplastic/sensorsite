@@ -2,6 +2,7 @@
 session_start();
 include("db.php");
 include("search_params.php");
+
 $_SESSION['page'] = "table";
 $db = new DBManager();
 $result = NULL;

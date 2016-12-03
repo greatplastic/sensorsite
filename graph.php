@@ -33,7 +33,6 @@ function make_base_graph($title, $time) {
 	$graph->SetTheme($theme_class);
 	$graph->title->Set($title);
 	$graph->SetBox(false);
-	//$graph->img->SetAntiAliasing();	
 	$graph->yaxis->HideZeroLabel();
 	$graph->yaxis->HideLine(false);
 	$graph->yaxis->HideTicks(false,false);
