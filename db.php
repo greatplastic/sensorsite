@@ -114,12 +114,11 @@ class DBManager {
 		$result = $this->con->query("SELECT node_id, latitude, longitude FROM nodes");
 		echo $this->con->error;
 		return $result;
-		
 	}
 	
 	function trigger_node($node_id) {
 		$node_id = (int) $node_id;
-		$query = $this->con->prepare("INSERT INTO sensors.monitor VALUES (0, 0.0, 0.0, '1980-11-21 17:45:00', NOW(), ?, NULL, 0)");
+		$query = $this->con->prepare("INSERT INTO sensors.monitor VALUES (0, 0.0, 0.0, '1980-11-21 17:45:00', NOW(), 0, NULL, ?)");
 		$query->bind_param("i", $node_id);
 		$query->execute();
 		if ($query->errno == 0) {
