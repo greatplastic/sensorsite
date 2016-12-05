@@ -17,15 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$result = $db->execute($sp);
 }
 
-/* Time intervals used for graphing 
- with a sampling rate of 12 seconds */
-$sec_interval = 5; // 5 samples in 1 minute
-$min_interval = 300; // 300 samples in 1 hour
-$hour_interval = 7200; // 7200 samples in 1 day
-$day_interval = 50400; // 50400 samples in 1 week
-$week_interval = 201600; // 201600 samples in 28 days
-$month_interval = 2419200; // 2419200 samples in 12*28 days
-
 function make_base_graph($title, $time) {
 	$graph = new Graph(800,600);
 	$graph->SetScale("datint");
@@ -42,26 +33,6 @@ function make_base_graph($title, $time) {
 	$graph->xaxis->SetLabelAngle(80);
 	$graph->xgrid->SetColor('#E3E3E3');
 	
-	$samples = count($time);
-	if ($samples <= $sec_interval) {
-		$graph ->xaxis->scale->SetDateFormat('i:s');
-		//$graph->xaxis->SetTextLabelInterval(2);
-	} elseif ($samples <= $min_interval) {
-		$graph ->xaxis->scale->SetDateFormat('H:i');
-		//$graph->xaxis->SetTextLabelInterval(2);
-	} elseif ($samples <= $hour_interval) {
-		$graph ->xaxis->scale->SetDateFormat('d H:i');
-		//$graph->xaxis->SetTextLabelInterval(2);
-	} elseif ($samples <= $day_interval) {
-		$graph ->xaxis->scale->SetDateFormat('d H:i');
-		//$graph->xaxis->SetTextLabelInterval(2);
-	} elseif ($samples <= $week_interval) {
-		$graph ->xaxis->scale->SetDateFormat('m-d H:i:s');
-		//$graph->xaxis->SetTextLabelInterval(2);
-	} else {
-		$graph ->xaxis->scale->SetDateFormat('Y-m-d H:i:s');
-		//$graph->xaxis->SetTextLabelInterval(2);
-	}
 	$graph->xaxis->SetTickLabels($time);
 	return $graph;
 }

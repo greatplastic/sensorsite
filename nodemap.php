@@ -4,13 +4,13 @@ include("db.php");
 $_SESSION['page'] = "nodemap";
 $db = new DBManager();
 $result = $db->get_node_locs();
-
 function make_row($row) {
 	$script = "map.panTo(new L.LatLng($row[latitude], $row[longitude]));";
 	$output = "<tr>\n";
-	$output .= sprintf("<td style='cursor: pointer' onclick='$script'>%s (click to view on map)</td>", $row["node_id"]);
+	$output .= sprintf("<td style='cursor: pointer' onclick='$script'>%s &nbsp;&nbsp;&nbsp;&nbsp;(click to view on map)</td>", $row["node_id"]);
 	$output .= sprintf("<td>%s</td>", $row["latitude"]);
 	$output .= sprintf("<td>%s</td>", $row["longitude"]);
+	$output .= sprintf("<td><button type='submit' onclick='return confirm(\"Trigger node %s?\")' name=submit value=%s class='btn btn-default btn-xs'>Trigger</button></td>", $row["node_id"], $row["node_id"]);
 	$output .= "</tr>\n";
 	return $output;
 }
@@ -42,18 +42,32 @@ function add_markers($lats, $longs) {
 		<title>CDC SensorView</title>
 	</head>
 	<body>
-	<?php include("nav.php"); ?>
+	<?php include("nav.php"); 
+	if (isset($_POST["submit"])) {
+		$triggered = $db->trigger_node($_POST["submit"]);
+		$node = (int) $_POST["submit"];
+		echo '<script language="javascript">';
+		if ($triggered) {
+			echo "alert('Node $node successfully triggered.')";
+		} else {
+			echo "alert('Node $node could not be triggered!')";
+		}
+		echo '</script>';
+	}
+	?>
 	
 	<div class="container">
 		<div class="panel panel-default">
 			<div class="panel-heading"><h2>Node Map</h2></div>
 			<div class="panel-body">
+				<form action="nodemap.php" method="post">
 				<table class="table table-striped">
 				<thead>
 					<tr>
 						<th>Node ID</th>
 						<th>Latitude</th>
 						<th>Longitude</th>
+						<th>Trigger Node?</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -70,7 +84,8 @@ function add_markers($lats, $longs) {
 					} 
 					?>
 				</tbody>
-				</table>			
+				</table>
+				</form>				
 				<div id="map" style="height: 400px;">
 				<script type="text/javascript">
 				var map = L.map('map',{

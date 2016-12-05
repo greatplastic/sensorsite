@@ -116,6 +116,18 @@ class DBManager {
 		return $result;
 		
 	}
+	
+	function trigger_node($node_id) {
+		$node_id = (int) $node_id;
+		$query = $this->con->prepare("INSERT INTO sensors.monitor VALUES (0, 0.0, 0.0, '1980-11-21 17:45:00', NOW(), ?, NULL, 0)");
+		$query->bind_param("i", $node_id);
+		$query->execute();
+		if ($query->errno == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }
 
