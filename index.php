@@ -150,8 +150,8 @@ function make_row($row) {
 				<thead>
 					<tr>
 						<th>Dust</th>
-						<th>Humidity</th>
-						<th>Temperature</th>
+						<th>Humidity (%)</th>
+						<th>Temperature (°C)</th>
 						<th>Time Collected</th>
 						<th>Node ID</th>
 					</tr>

@@ -23,6 +23,8 @@ function make_base_graph($title, $time) {
 	$theme_class = new UniversalTheme;
 	$graph->SetTheme($theme_class);
 	$graph->title->Set($title);
+	$graph->title->SetMargin(30);
+	$graph->legend->SetPos(0.5,0.08,'center','top');
 	$graph->SetBox(false);
 	$graph->yaxis->HideZeroLabel();
 	$graph->yaxis->HideLine(false);
@@ -114,7 +116,7 @@ function make_base_graph($title, $time) {
 		$dust_data = array();
 		if (!is_null($result)) {
 			while ($curr_row = $result->fetch_assoc()) {
-				$time_data[] = date("Y-m-d H:i:s", strtotime($curr_row["timestamp"]));
+				$time_data[] = date("Y-m-d H:i:s", strtotime($curr_row["t_collected"]));
 				$temp_data[] = $curr_row["temperature"];
 				$hum_data[] = $curr_row["humidity"];
 				$dust_data[] = $curr_row["dust"];
@@ -131,12 +133,12 @@ function make_base_graph($title, $time) {
 			$p1 = new LinePlot($temp_data);
 			$temp_graph->Add($p1);
 			$p1->SetColor("#6495ED");
-			$p1->SetLegend('Temperature');
+			$p1->SetLegend('Temperature (°C)');
 
 			$p2 = new LinePlot($hum_data);
 			$hum_graph->Add($p2);
 			$p2->SetColor("#B22222");
-			$p2->SetLegend('Humidity');
+			$p2->SetLegend('Humidity (%)');
 
 			$p3 = new LinePlot($dust_data);
 			$dust_graph->Add($p3);
